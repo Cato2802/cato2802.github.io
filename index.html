@@ -73,9 +73,21 @@ a:focus-visible, button:focus-visible { outline: 2px solid var(--snow); outline-
 .band .btn { margin-top: 14px; }
 .band h3 { color: var(--ink); font-weight: 700; font-size: 28px; margin: 10px 0 20px; }
 .skills { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; list-style: none; margin: 0; padding: 0; }
-.skills li { background: linear-gradient(170deg, #1d1d22, #09090b); border-radius: 22px; padding: 28px 26px 26px; box-shadow: 0 18px 30px -14px rgba(20, 22, 35, .55); color: var(--fog); font-size: 16px; line-height: 1.45; }
+.hint { margin: -8px 0 18px !important; font-size: 15px !important; color: var(--slate); }
+.skills li { display: grid; }
+.flip { all: unset; box-sizing: border-box; display: grid; width: 100%; cursor: pointer; perspective: 900px; border-radius: 22px; }
+.flip:focus-visible { outline: 2px solid var(--ink); outline-offset: 3px; }
+.flip .inner { display: grid; transform-style: preserve-3d; transition: transform .55s cubic-bezier(.2, .7, .2, 1); }
+.flip:hover .inner, .flip[aria-pressed="true"] .inner { transform: rotateY(180deg); }
+.flip .face { grid-area: 1 / 1; display: block; -webkit-backface-visibility: hidden; backface-visibility: hidden; border-radius: 22px; padding: 28px 26px 26px; box-shadow: 0 18px 30px -14px rgba(20, 22, 35, .55); font-size: 16px; line-height: 1.45; }
+.flip .front { background: linear-gradient(170deg, #1d1d22, #09090b); color: var(--fog); }
+.flip .back { background: #fbfbfd; color: var(--slate); transform: rotateY(180deg); font-size: 14px; }
 .skills b { display: block; font-family: var(--font-display); font-weight: 700; font-size: 22px; color: #fff; }
 .skills b::after { content: ""; display: block; width: 34px; height: 2px; background: #fff; margin: 14px 0 14px; }
+.flip .back small { display: block; font-size: 12px; letter-spacing: .06em; text-transform: uppercase; color: #5c5e68; }
+.flip .back strong { display: block; font-family: var(--font-display); font-weight: 800; font-size: 28px; line-height: 1.2; color: var(--ink); margin: 4px 0 8px; }
+.flip .back em { display: block; font-style: normal; font-weight: 700; color: var(--ink); margin-bottom: 6px; }
+@media (prefers-reduced-motion: reduce) { .flip .inner { transition: none; } }
 
 /* ---------- projects ---------- */
 .projects { padding: clamp(64px, 9vw, 120px) 0 clamp(48px, 6vw, 80px); }
@@ -162,16 +174,17 @@ footer { text-align: center; padding: 34px var(--gutter) 46px; font-size: 16px; 
     <div>
       <h2>About me</h2>
       <p>I like following a number the whole way: finding where it lives, cleaning it, spotting the pattern in it and putting it on a page that people can read at a glance.</p>
-      <p>The projects here are from my university years. Since then I have worked as a data analyst in insurance and FMCG, building Power BI reports.</p>
+      <p>The projects here are from my university years. Since then I have spent 2+ years as a data analyst in insurance, at FWD Insurance Viet Nam and Dai-ichi Life Viet Nam, building dashboards and reports for Operations, Customer Experience and Internal Control.</p>
       <a class="btn dark" href="#projects">My projects</a>
     </div>
     <div id="skills">
       <h3>Skills</h3>
+      <p class="hint">Hover or tap a card to see where I used it.</p>
       <ul class="skills">
-        <li><b>Power BI</b>Dashboards, data models and DAX measures</li>
-        <li><b>SQL</b>Preprocessing and aggregation</li>
-        <li><b>Python</b>pandas, scikit-learn, Streamlit and web scraping</li>
-        <li><b>Excel</b>Source workbooks, cleaning and quick charts</li>
+        <li><button type="button" class="flip" id="skill-1" aria-pressed="false"><span class="inner"><span class="face front"><b>Power BI</b>Dashboards, data models and DAX measures</span><span class="face back"><small>Power BI at work</small><strong>2+ years</strong><em>FWD Insurance Viet Nam, Dai-ichi Life Viet Nam</em>7+ dashboards delivered for Operations, Customer Experience and Internal Control</span></span></button></li>
+        <li><button type="button" class="flip" id="skill-2" aria-pressed="false"><span class="inner"><span class="face front"><b>SQL</b>Queries, dataset relationships and validation</span><span class="face back"><small>SQL at work</small><strong>2+ years</strong><em>FWD Insurance Viet Nam, Dai-ichi Life Viet Nam</em>Report datasets, customer analysis and monitoring data for dashboards</span></span></button></li>
+        <li><button type="button" class="flip" id="skill-3" aria-pressed="false"><span class="inner"><span class="face front"><b>Excel</b>Power Query, automation tools and recurring reports</span><span class="face back"><small>Excel at work</small><strong>2+ years</strong><em>FWD Insurance Viet Nam, Dai-ichi Life Viet Nam</em>Automated Power Query tools and 11+ recurring reports streamlined</span></span></button></li>
+        <li><button type="button" class="flip" id="skill-4" aria-pressed="false"><span class="inner"><span class="face front"><b>Python</b>pandas, scikit-learn, Streamlit and web scraping</span><span class="face back"><small>Python</small><strong>Project work</strong><em>University of Economics and Law, VNU-HCM</em>Used in the university projects on this page, not yet in a company role</span></span></button></li>
       </ul>
     </div>
   </div>
@@ -310,6 +323,10 @@ footer { text-align: center; padding: 34px var(--gutter) 46px; font-size: 16px; 
     document.getElementById("cv-lott").innerHTML = svg(s, "Five lottery draws, numbers 866 to 870 from March and April 2022, each with six winning numbers.");
   })();
 
+  // skill cards: tap or press to flip
+  Array.prototype.forEach.call(document.querySelectorAll(".flip"), function (btn) {
+    btn.addEventListener("click", function () { btn.setAttribute("aria-pressed", btn.getAttribute("aria-pressed") === "true" ? "false" : "true"); });
+  });
   // carousel arrows
   var track = document.getElementById("track");
   function step(dir) {
