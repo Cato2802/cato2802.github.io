@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Daniel Dang Data Portfolio</title>
+<meta name="description" content="Data analyst portfolio: Power BI, SQL, Python and Excel projects.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,700&family=Noto+Serif:wght@600;700;800&display=swap" rel="stylesheet">
+<style>
+/* Layout idea: one dark stage with soft spheres, a pale band for About and Skills,
+   then a swipeable row of project cards whose covers are drawn from each repo's data. */
+:root {
+  color-scheme: dark;
+  --night: #050506;        /* page */
+  --panel: #111114;        /* cards on the dark stage */
+  --line: #26262b;         /* card borders */
+  --snow: #ececf1;         /* headings, light buttons */
+  --fog: #b9b9c2;          /* body text on dark */
+  --ink: #17171a;          /* text on the pale band */
+  --slate: #3d3f47;        /* body text on the pale band */
+  --cover: #f4f5f8;        /* project cover surface */
+  --series: #2a78d6;       /* the one data colour on covers */
+  --font-display: "Noto Serif", Georgia, "Times New Roman", serif;
+  --font-body: "DM Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --gutter: clamp(20px, 5vw, 64px);
+}
+*, *::before, *::after { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; scroll-behavior: smooth; }
+body { margin: 0; background: var(--night); color: var(--fog); font-family: var(--font-body); font-size: 17px; line-height: 1.6; }
+.wrap { max-width: 1240px; margin: 0 auto; padding: 0 var(--gutter); }
+h1, h2, h3 { font-family: var(--font-display); color: var(--snow); margin: 0; text-wrap: balance; }
+a { color: inherit; }
+a:focus-visible, button:focus-visible { outline: 2px solid var(--snow); outline-offset: 3px; }
+.band a:focus-visible { outline-color: var(--ink); }
+
+/* ---------- nav ---------- */
+.nav { position: sticky; top: 0; z-index: 10; background: rgba(5, 5, 6, .82); -webkit-backdrop-filter: blur(10px); backdrop-filter: blur(10px); }
+.nav .wrap { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 6px 24px; padding-top: 16px; padding-bottom: 16px; }
+.nav .brand { font-family: var(--font-display); font-weight: 700; font-size: 22px; color: var(--fog); text-decoration: none; }
+.nav ul { display: flex; flex-wrap: wrap; gap: 4px 28px; list-style: none; margin: 0; padding: 0; }
+.nav ul a { text-decoration: none; font-weight: 500; color: var(--fog); }
+.nav a:hover { color: #fff; }
+
+/* ---------- buttons ---------- */
+.btn { display: inline-flex; align-items: center; justify-content: center; min-height: 58px; padding: 0 34px; border-radius: 999px; font-weight: 700; font-size: 17px; text-decoration: none; border: 1.5px solid var(--snow); color: #fff; background: transparent; cursor: pointer; }
+.btn.solid { background: var(--snow); color: var(--ink); }
+.btn:hover { background: #fff; color: var(--ink); border-color: #fff; }
+.btn.dark { background: var(--ink); border-color: var(--ink); color: #fff; }
+.btn.dark:hover { background: #000; color: #fff; border-color: #000; }
+.btns { display: flex; flex-wrap: wrap; gap: 14px 16px; }
+
+/* ---------- hero ---------- */
+.hero { position: relative; overflow: hidden; }
+.sphere { position: absolute; border-radius: 50%; background: radial-gradient(circle at 32% 28%, #2b2b30 0%, #151518 55%, #0a0a0c 100%); pointer-events: none; }
+.sphere.a { width: 300px; height: 300px; left: -140px; top: 0; }
+.sphere.b { width: 300px; height: 300px; left: 56%; top: 10px; }
+.sphere.c { width: 160px; height: 160px; right: 6%; top: 100px; }
+.sphere.d { width: 320px; height: 320px; right: -100px; bottom: -200px; }
+.hero .wrap { position: relative; display: grid; grid-template-columns: minmax(0, 460px) minmax(0, 1fr); gap: 40px 72px; align-items: center; padding-top: clamp(40px, 7vw, 92px); padding-bottom: clamp(56px, 8vw, 120px); }
+.portrait { width: 100%; max-width: 460px; aspect-ratio: 1; border-radius: 50%; border: 2px solid var(--snow); background: linear-gradient(160deg, #c9cad3, #9a9ba6); display: grid; place-items: center; }
+.portrait span { font-family: var(--font-display); font-weight: 800; font-size: clamp(72px, 13vw, 150px); color: var(--ink); letter-spacing: -.02em; line-height: 1; }
+.hero h1 { font-weight: 800; font-size: clamp(60px, 9vw, 122px); line-height: .96; letter-spacing: -.01em; background: linear-gradient(180deg, #ffffff 30%, #9a9aa5 100%); -webkit-background-clip: text; background-clip: text; color: transparent; padding-bottom: .08em; }
+.hero p { max-width: 34em; margin: 26px 0 30px; font-size: 20px; line-height: 1.55; }
+.hero p strong { color: #fff; font-weight: 500; }
+
+/* ---------- pale band: about + skills ---------- */
+.band { background: linear-gradient(115deg, #c3c7d4 0%, #dfe0e6 40%, #eceded 62%, #d7d9e0 100%); color: var(--slate); }
+.band .wrap { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 48px 72px; align-items: start; padding-top: clamp(56px, 8vw, 96px); padding-bottom: clamp(56px, 8vw, 96px); }
+.band h2 { color: var(--ink); font-weight: 800; font-size: clamp(42px, 5.4vw, 64px); line-height: 1.05; margin-bottom: 34px; }
+.band p { margin: 0 0 18px; max-width: 30em; font-size: 19px; }
+.band .btn { margin-top: 14px; }
+.band h3 { color: var(--ink); font-weight: 700; font-size: 28px; margin: 10px 0 20px; }
+.skills { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; list-style: none; margin: 0; padding: 0; }
+.skills li { background: linear-gradient(170deg, #1d1d22, #09090b); border-radius: 22px; padding: 28px 26px 26px; box-shadow: 0 18px 30px -14px rgba(20, 22, 35, .55); color: var(--fog); font-size: 16px; line-height: 1.45; }
+.skills b { display: block; font-family: var(--font-display); font-weight: 700; font-size: 22px; color: #fff; }
+.skills b::after { content: ""; display: block; width: 34px; height: 2px; background: #fff; margin: 14px 0 14px; }
+
+/* ---------- projects ---------- */
+.projects { padding: clamp(64px, 9vw, 120px) 0 clamp(48px, 6vw, 80px); }
+.projects .head { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: flex-end; gap: 16px 24px; margin-bottom: 34px; }
+.projects h2 { font-weight: 800; font-size: clamp(44px, 5.6vw, 68px); line-height: 1.05; }
+.projects .head p { margin: 6px 0 0; }
+.arrows { display: flex; gap: 12px; }
+.arrows button { width: 58px; height: 58px; border-radius: 50%; border: 1.5px solid var(--snow); background: transparent; color: #fff; font-size: 26px; line-height: 1; cursor: pointer; font-family: var(--font-body); }
+.arrows button:hover { background: var(--snow); color: var(--ink); }
+.track { display: flex; gap: 30px; overflow-x: auto; scroll-snap-type: x mandatory; padding: 4px var(--gutter) 20px; scroll-padding-left: var(--gutter); scrollbar-width: thin; scrollbar-color: #33333a transparent; }
+.track > article { flex: 0 0 min(424px, 84vw); scroll-snap-align: start; display: flex; flex-direction: column; }
+.cover { background: var(--panel); border: 1px solid var(--line); border-radius: 26px; padding: 20px; }
+.cover svg { display: block; width: 100%; height: auto; border-radius: 12px; background: var(--cover); }
+.tag { align-self: flex-start; margin: 22px 0 14px; padding: 3px 13px; border: 1px solid #55555e; border-radius: 999px; font-size: 14px; color: var(--snow); }
+.track h3 { font-weight: 700; font-size: 24px; line-height: 1.35; }
+.track p { margin: 12px 0 10px; }
+.track .tools { color: #fff; font-size: 16px; margin: 0 0 14px; }
+.track .more { margin-top: auto; font-weight: 700; color: var(--snow); text-underline-offset: 4px; }
+.track .more:hover { color: #fff; }
+.center { display: flex; justify-content: center; margin-top: 44px; }
+
+/* cover drawings */
+.cv-title { font: 700 13px var(--font-body); fill: #17171a; }
+.cv-sub { font: 400 10px var(--font-body); fill: #5c5e68; }
+.cv-kpi { font: 700 15px var(--font-body); fill: #17171a; }
+.cv-tick { font: 400 9.5px var(--font-body); fill: #6c6e78; font-variant-numeric: tabular-nums; }
+.cv-val { font: 500 10.5px var(--font-body); fill: #17171a; font-variant-numeric: tabular-nums; }
+.cv-ball { font: 700 11px var(--font-body); fill: #17171a; font-variant-numeric: tabular-nums; }
+
+/* ---------- contact ---------- */
+.contact { padding: clamp(40px, 6vw, 90px) 0 clamp(48px, 6vw, 80px); }
+.contact h2 { font-weight: 800; font-size: clamp(42px, 5.6vw, 68px); line-height: 1.08; }
+.contact p { max-width: 32em; margin: 22px 0 28px; font-size: 20px; }
+.contact .addr { margin: 22px 0 0; font-size: 16px; }
+footer { text-align: center; padding: 34px var(--gutter) 46px; font-size: 16px; color: #9a9aa3; }
+
+@media (max-width: 880px) {
+  .hero .wrap, .band .wrap { grid-template-columns: minmax(0, 1fr); }
+  .portrait { max-width: 240px; }
+  .sphere.b { left: 40%; }
+}
+@media (max-width: 440px) {
+  .skills { grid-template-columns: minmax(0, 1fr); }
+  .btn { padding: 0 26px; }
+}
+@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+</style>
+</head>
+<body>
+
+<div class="nav">
+  <div class="wrap">
+    <a class="brand" href="#top">Daniel Dang</a>
+    <ul>
+      <li><a href="#about">About me</a></li>
+      <li><a href="#skills">Skills</a></li>
+      <li><a href="#projects">Projects</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+  </div>
+</div>
+
+<header class="hero" id="top">
+  <span class="sphere a"></span><span class="sphere b"></span><span class="sphere c"></span><span class="sphere d"></span>
+  <div class="wrap">
+    <div class="portrait" role="img" aria-label="Daniel Dang"><span aria-hidden="true">DD</span></div>
+    <div>
+      <h1>My Portfolio</h1>
+      <p>I'm <strong>Daniel Dang</strong>, a data analyst. I collect, clean and model data, then build the dashboard that answers the question, using Power BI, SQL, Python and Excel.</p>
+      <div class="btns">
+        <a class="btn" href="#about">About me</a>
+        <a class="btn solid" href="#projects">See my projects</a>
+      </div>
+    </div>
+  </div>
+</header>
+
+<main>
+<section class="band" id="about">
+  <div class="wrap">
+    <div>
+      <h2>About me</h2>
+      <p>I like following a number the whole way: finding where it lives, cleaning it, spotting the pattern in it and putting it on a page that people can read at a glance.</p>
+      <p>The projects here are from my university years. Since then I have worked as a data analyst in insurance and FMCG, building Power BI reports.</p>
+      <a class="btn dark" href="#projects">My projects</a>
+    </div>
+    <div id="skills">
+      <h3>Skills</h3>
+      <ul class="skills">
+        <li><b>Power BI</b>Dashboards, data models and DAX measures</li>
+        <li><b>SQL</b>Preprocessing and aggregation</li>
+        <li><b>Python</b>pandas, scikit-learn, Streamlit and web scraping</li>
+        <li><b>Excel</b>Source workbooks, cleaning and quick charts</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section class="projects" id="projects">
+  <div class="wrap">
+    <div class="head">
+      <div>
+        <h2>Projects</h2>
+        <p>Swipe or use the arrows. Each cover is drawn from the data in that project's repository.</p>
+      </div>
+      <div class="arrows">
+        <button type="button" id="prev" aria-label="Previous project">&larr;</button>
+        <button type="button" id="next" aria-label="Next project">&rarr;</button>
+      </div>
+    </div>
+  </div>
+  <div class="wrap" style="padding:0">
+    <div class="track" id="track" tabindex="0" aria-label="Projects">
+      <article>
+        <div class="cover" id="cv-sales"></div>
+        <span class="tag">Retail</span>
+        <h3>Sales Performance Dashboard</h3>
+        <p>A Power BI report built for a data visualization competition. It tracks sales volume, revenue, profit and cost across product lines, countries and order channels, with slicers for region, manager and product line.</p>
+        <p class="tools">Power BI, DAX, Excel, SQL</p>
+        <a class="more" href="https://github.com/Cato2802/Toto_Project-Dashboard-Sales-Performance">View on GitHub</a>
+      </article>
+      <article>
+        <div class="cover" id="cv-rfm"></div>
+        <span class="tag">E-commerce</span>
+        <h3>Customer Segmentation with RFM and K-means</h3>
+        <p>A team competition entry. We grouped the customers of a Vietnamese gift marketplace into six clusters by recency, frequency and spend from 6,601 orders, then wrote a report with marketing actions for each group.</p>
+        <p class="tools">Python, pandas, scikit-learn, seaborn</p>
+        <a class="more" href="https://github.com/Cato2802/CUSTOMER-SEGMENT-USING-RFM-AND-KMEAN-MODELS">View on GitHub</a>
+      </article>
+      <article>
+        <div class="cover" id="cv-fpt"></div>
+        <span class="tag">Finance</span>
+        <h3>FPT Stock Dashboard in Streamlit</h3>
+        <p>A Streamlit app that reads the daily price history of FPT shares and shows metric tiles with open and close price charts. The viewer picks the series and chart height from a sidebar.</p>
+        <p class="tools">Python, Streamlit, pandas, CSS</p>
+        <a class="more" href="https://github.com/Cato2802/Toto_Project_Dashboard-with-Streamlit">View on GitHub</a>
+      </article>
+      <article>
+        <div class="cover" id="cv-lott"></div>
+        <span class="tag">Web scraping</span>
+        <h3>Vietlott Results Scraper</h3>
+        <p>A notebook that clicks through 13 pages of lottery results with Selenium, reads 104 draws with BeautifulSoup, saves them to CSV and plots how the winning numbers are distributed.</p>
+        <p class="tools">Python, Selenium, BeautifulSoup, pandas</p>
+        <a class="more" href="https://github.com/Cato2802/Toto_project_CollectData_LotteryData">View on GitHub</a>
+      </article>
+    </div>
+  </div>
+  <div class="center"><a class="btn solid" href="https://github.com/Cato2802?tab=repositories">Show all projects</a></div>
+</section>
+
+<section class="contact" id="contact">
+  <div class="wrap">
+    <h2>Let's work together</h2>
+    <p>Open to data analyst and BI roles. Have a look at my code, notebooks and report files on GitHub.</p>
+    <div class="btns">
+      <a class="btn solid" href="https://github.com/Cato2802">GitHub</a>
+    </div>
+    <p class="addr">github.com/Cato2802</p>
+  </div>
+</section>
+</main>
+
+<footer>Designed and built by Daniel Dang</footer>
+
+<script>
+(function () {
+  "use strict";
+  var NS = "http://www.w3.org/2000/svg", W = 400, H = 250;
+  function svg(inner, label) {
+    return '<svg viewBox="0 0 ' + W + ' ' + H + '" role="img" aria-label="' + label + '">' + inner + "</svg>";
+  }
+  function tiles(items) { // row of KPI tiles
+    var w = (W - 32 - 10 * (items.length - 1)) / items.length, s = "";
+    items.forEach(function (t, i) {
+      var x = 16 + i * (w + 10);
+      s += '<rect x="' + x + '" y="40" width="' + w + '" height="44" rx="8" fill="#ffffff" stroke="#e1e3ea"/>';
+      s += '<text class="cv-kpi" x="' + (x + 10) + '" y="60">' + t[0] + '</text><text class="cv-sub" x="' + (x + 10) + '" y="75">' + t[1] + "</text>";
+    });
+    return s;
+  }
+  function line(vals, lo, hi, ticks, tickFmt, labels, endLabel, tipFmt) {
+    var x0 = 44, x1 = W - 58, y0 = 100, y1 = H - 28, s = "";
+    var X = function (i) { return x0 + (x1 - x0) * i / (vals.length - 1); };
+    var Y = function (v) { return y1 - (y1 - y0) * (v - lo) / (hi - lo); };
+    ticks.forEach(function (t) {
+      s += '<line x1="' + x0 + '" x2="' + x1 + '" y1="' + Y(t) + '" y2="' + Y(t) + '" stroke="#e1e3ea"/>';
+      s += '<text class="cv-tick" x="' + (x0 - 6) + '" y="' + (Y(t) + 3) + '" text-anchor="end">' + tickFmt(t) + "</text>";
+    });
+    s += '<line x1="' + x0 + '" x2="' + x1 + '" y1="' + y1 + '" y2="' + y1 + '" stroke="#c6c8d2"/>';
+    var d = vals.map(function (v, i) { return (i ? "L" : "M") + X(i).toFixed(1) + " " + Y(v).toFixed(1); }).join(" ");
+    s += '<path d="' + d + " L" + x1 + " " + y1 + " L" + x0 + " " + y1 + ' Z" fill="#2a78d6" opacity=".1"/>';
+    s += '<path d="' + d + '" fill="none" stroke="#2a78d6" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/>';
+    labels.forEach(function (l) {
+      s += '<text class="cv-tick" x="' + X(l[0]) + '" y="' + (H - 12) + '" text-anchor="' + (l[0] === 0 ? "start" : l[0] === vals.length - 1 ? "end" : "middle") + '">' + l[1] + "</text>";
+    });
+    var n = vals.length - 1;
+    s += '<circle cx="' + X(n) + '" cy="' + Y(vals[n]) + '" r="4.5" fill="#2a78d6" stroke="#f4f5f8" stroke-width="2"/>';
+    s += '<text class="cv-val" x="' + (X(n) + 8) + '" y="' + (Y(vals[n]) + 4) + '">' + endLabel + "</text>";
+    vals.forEach(function (v, i) { // hover targets with native tooltips
+      s += '<circle cx="' + X(i) + '" cy="' + Y(v) + '" r="7" fill="transparent"><title>' + tipFmt(i, v) + "</title></circle>";
+    });
+    return s;
+  }
+  var MON = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+
+  // 01 sales: monthly revenue from Sales.xlsx (Quantity x Price), millions
+  var sales = [23.1,22.35,26.35,23.0,24.61,22.3,23.39,23.46,21.69,23.99,24.09,24.43,30.89,25.48,29.83,29.55,32.28,31.41,32.15,30.79,28.77,30.96,27.54,31.94,34.94,31.21,40.46,34.33,38.92,34.05,37.13,35.72,33.19,35.78,31.74,36.94];
+  document.getElementById("cv-sales").innerHTML = svg(
+    '<text class="cv-title" x="16" y="26">Sales performance, 2016 to 2018</text>' +
+    tiles([["72,743", "Order lines"], ["1.07B", "Revenue"], ["42%", "Profit margin"]]) +
+    line(sales, 18, 42, [20, 30, 40], function (t) { return t + "M"; }, [[0, "2016"], [12, "2017"], [24, "2018"]], "36.9M",
+      function (i, v) { return MON[i % 12] + " " + (2016 + Math.floor(i / 12)) + ": " + v.toFixed(1) + "M revenue"; }),
+    "Dashboard-style cover: 72,743 order lines, 1.07 billion revenue, 42 percent profit margin, and monthly revenue rising from about 23 million in 2016 to about 37 million at the end of 2018.");
+
+  // 02 RFM: mean spend per customer by cluster (million VND), notebook output
+  var spend = [0.05, 0.75, 1.64, 6.01, 0.51, 2.28], rec = [567, 261, 1119, 526, 1152, 9], freq = [1.1, 1.3, 1.5, 6.2, 1.1, 3.1];
+  (function () {
+    var s = '<text class="cv-title" x="16" y="26">Six customer clusters</text><text class="cv-sub" x="16" y="42">Average spend per customer, million VND</text>';
+    var x0 = 78, max = 6.01, bw = W - x0 - 60;
+    spend.forEach(function (v, i) {
+      var y = 60 + i * 30, w = Math.max(6, bw * v / max);
+      s += '<text class="cv-tick" x="16" y="' + (y + 13) + '" style="font-size:11px">Cluster ' + i + "</text>";
+      s += '<path d="M' + x0 + " " + y + " h" + (w - 4) + " a4 4 0 0 1 4 4 v10 a4 4 0 0 1 -4 4 h-" + (w - 4) + ' z" fill="#2a78d6"><title>Cluster ' + i + ": " + v.toFixed(2) + "M VND spend, " + freq[i] + " orders, " + rec[i] + " days since last order</title></path>";
+      s += '<text class="cv-val" x="' + (x0 + w + 6) + '" y="' + (y + 13) + '">' + v.toFixed(2) + "</text>";
+    });
+    s += '<line x1="' + x0 + '" x2="' + x0 + '" y1="54" y2="234" stroke="#c6c8d2"/>';
+    document.getElementById("cv-rfm").innerHTML = svg(s, "Bar chart of average spend per customer for six clusters, in million dong: 0.05, 0.75, 1.64, 6.01, 0.51 and 2.28. Cluster 3 spends the most.");
+  })();
+
+  // 03 FPT: daily close from the CSV, VND
+  var fptD = ["1 Mar","4 Mar","5 Mar","6 Mar","7 Mar","8 Mar","11 Mar","12 Mar","13 Mar","14 Mar","15 Mar","18 Mar","19 Mar","20 Mar","21 Mar","22 Mar","25 Mar","26 Mar","27 Mar","28 Mar","29 Mar","1 Apr"];
+  var fpt = [110800,111400,110700,109000,111300,110000,110000,111900,117000,117000,116000,113000,112000,114500,116200,114900,114000,115000,115200,117100,116500,116300];
+  document.getElementById("cv-fpt").innerHTML = svg(
+    '<text class="cv-title" x="16" y="26">FPT share price, March 2024</text>' +
+    tiles([["116,300", "Close, 1 Apr (VND)"], ["+5.0%", "Since 1 Mar"], ["22", "Trading days"]]) +
+    line(fpt, 108000, 118500, [110000, 114000, 118000], function (t) { return t / 1000 + "K"; }, [[0, "1 Mar"], [10, "15 Mar"], [21, "1 Apr"]], "116,300",
+      function (i, v) { return fptD[i] + " 2024: " + v.toLocaleString("en-US") + " VND"; }),
+    "Dashboard-style cover: FPT closed at 116,300 dong on 1 April 2024, up 5.0 percent from 1 March, over 22 trading days.");
+
+  // 04 Vietlott: the five draws shown in the notebook
+  var draws = [[870, "3 Apr 2022", [5,11,20,26,40,43]], [869, "1 Apr 2022", [2,19,25,32,41,44]], [868, "30 Mar 2022", [1,12,26,28,39,45]], [867, "27 Mar 2022", [8,17,21,39,44,45]], [866, "25 Mar 2022", [1,12,13,27,29,35]]];
+  (function () {
+    var s = '<text class="cv-title" x="16" y="26">Scraped Vietlott draws</text><text class="cv-sub" x="16" y="42">Draw number, date and six winning numbers</text>';
+    draws.forEach(function (d, r) {
+      var y = 76 + r * 36;
+      if (r) s += '<line x1="16" x2="' + (W - 16) + '" y1="' + (y - 18) + '" y2="' + (y - 18) + '" stroke="#e1e3ea"/>';
+      s += '<text class="cv-val" x="16" y="' + (y - 1) + '" style="font-weight:700">#' + d[0] + '</text><text class="cv-tick" x="16" y="' + (y + 11) + '">' + d[1] + "</text>";
+      d[2].forEach(function (n, i) {
+        var cx = 186 + i * 36;
+        s += '<circle cx="' + cx + '" cy="' + y + '" r="13" fill="#ffffff" stroke="#2a78d6" stroke-width="1.5"/><text class="cv-ball" x="' + cx + '" y="' + (y + 4) + '" text-anchor="middle">' + (n < 10 ? "0" + n : n) + "</text>";
+      });
+    });
+    document.getElementById("cv-lott").innerHTML = svg(s, "Five lottery draws, numbers 866 to 870 from March and April 2022, each with six winning numbers.");
+  })();
+
+  // carousel arrows
+  var track = document.getElementById("track");
+  function step(dir) {
+    var card = track.querySelector("article");
+    var by = card ? card.getBoundingClientRect().width + 30 : 400;
+    var reduce = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    track.scrollBy({ left: dir * by, behavior: reduce ? "auto" : "smooth" });
+  }
+  document.getElementById("prev").addEventListener("click", function () { step(-1); });
+  document.getElementById("next").addEventListener("click", function () { step(1); });
+})();
+</script>
+</body>
+</html>
