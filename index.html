@@ -7,7 +7,7 @@
 <meta name="description" content="Data analyst portfolio: Power BI, SQL, Python and Excel projects.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,700&family=Noto+Serif:wght@600;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
 <style>
 /* Layout idea: one dark stage with soft spheres, a pale band for About and Skills,
    then a swipeable row of project cards whose covers are drawn from each repo's data. */
@@ -23,8 +23,8 @@
   --cover: #f4f5f8;        /* project cover surface */
   --series: #2a78d6;       /* the one data colour on covers */
   --coral: #f2734d;        /* accent taken from the lion in the portrait */
-  --font-display: "Noto Serif", Georgia, "Times New Roman", serif;
-  --font-body: "DM Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-display: "Poppins", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-body: "Poppins", system-ui, -apple-system, "Segoe UI", sans-serif;
   --gutter: clamp(20px, 5vw, 64px);
 }
 *, *::before, *::after { box-sizing: border-box; }
@@ -162,6 +162,64 @@ footer { text-align: center; padding: 34px var(--gutter) 46px; font-size: 16px; 
 .portrait { border-color: var(--green); }
 .contact .addr dt, footer { color: #5f7c6c; }
 a:focus-visible, button:focus-visible { outline-color: var(--green); }
+
+/* ===== Skill cards (About me > Skills): green glassmorphism ===== */
+.skills { position: relative; isolation: isolate; }
+.skills::before { /* soft green light behind the glass */
+  content: ""; position: absolute; z-index: -1; inset: -6% -4%;
+  background:
+    radial-gradient(circle at 22% 28%, rgba(47, 160, 104, .75) 0 18%, transparent 42%),
+    radial-gradient(circle at 78% 72%, rgba(31, 122, 79, .6) 0 16%, transparent 40%),
+    radial-gradient(circle at 70% 18%, rgba(143, 214, 176, .9) 0 14%, transparent 36%);
+  filter: blur(18px);
+}
+.flip .face {
+  -webkit-backdrop-filter: blur(16px) saturate(140%); backdrop-filter: blur(16px) saturate(140%);
+  border: 1px solid rgba(255, 255, 255, .65);
+  box-shadow: 0 10px 30px -12px rgba(18, 60, 40, .35), inset 0 1px 0 rgba(255, 255, 255, .7);
+}
+.flip .front { background: linear-gradient(150deg, rgba(255, 255, 255, .55), rgba(222, 243, 231, .28)); color: #2c4a3b; }
+.flip .back { background: linear-gradient(150deg, rgba(255, 255, 255, .85), rgba(235, 248, 240, .7)); }
+.skills b { color: #12261c; }
+.skills b::after { background: var(--green); }
+.flip .back strong { color: var(--green); }
+
+/* ===== Project cards (Projects section): same green glassmorphism as the skill cards ===== */
+.projects {
+  background:
+    radial-gradient(38% 45% at 12% 62%, rgba(47, 160, 104, .38), transparent 70%),
+    radial-gradient(30% 40% at 58% 78%, rgba(143, 214, 176, .55), transparent 70%),
+    radial-gradient(32% 42% at 92% 48%, rgba(31, 122, 79, .30), transparent 70%),
+    var(--night);
+}
+.track { padding-top: 14px; padding-bottom: 34px; }
+.track > article {
+  background: linear-gradient(150deg, rgba(255, 255, 255, .62), rgba(222, 243, 231, .30));
+  -webkit-backdrop-filter: blur(16px) saturate(140%); backdrop-filter: blur(16px) saturate(140%);
+  border: 1px solid rgba(255, 255, 255, .7);
+  border-radius: 26px;
+  padding: 16px 18px 22px;
+  box-shadow: 0 10px 30px -12px rgba(18, 60, 40, .35), inset 0 1px 0 rgba(255, 255, 255, .7);
+}
+.cover { background: rgba(255, 255, 255, .55); border: 1px solid rgba(255, 255, 255, .75); border-radius: 18px; padding: 10px; box-shadow: none; }
+.cover img, .cover svg { border-radius: 10px; }
+.tag { margin-top: 18px; background: rgba(255, 255, 255, .5); }
+.track .more { color: var(--green); text-decoration-color: rgba(31, 122, 79, .45); }
+
+/* ===== Typography: thin geometric sans (Poppins) across the page ===== */
+body { font-weight: 300; }
+h1, h2, h3 { font-weight: 500 !important; letter-spacing: -.02em; }
+.hero h1 { font-size: clamp(54px, 7.4vw, 100px); line-height: 1.02; }
+.band h2, .projects h2, .contact h2 { font-size: clamp(38px, 4.6vw, 56px); }
+.nav .brand { font-weight: 600; }
+.nav ul a { font-weight: 400; }
+.hero p strong, .flip .back em { font-weight: 500; }
+.btn { font-weight: 500; }
+.skills b { font-weight: 500; }
+.flip .back strong { font-weight: 600; }
+.track .tools, .track .more { font-weight: 400; }
+.track .more { font-weight: 500; }
+.contact .addr dd { font-weight: 400; }
 </style>
 </head>
 <body>
