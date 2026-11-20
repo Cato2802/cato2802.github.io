@@ -79,7 +79,9 @@ a:focus-visible, button:focus-visible { outline: 2px solid var(--snow); outline-
 .flip { all: unset; box-sizing: border-box; display: grid; width: 100%; cursor: pointer; perspective: 900px; border-radius: 22px; }
 .flip:focus-visible { outline: 2px solid var(--ink); outline-offset: 3px; }
 .flip .inner { display: grid; transform-style: preserve-3d; transition: transform .55s cubic-bezier(.2, .7, .2, 1); }
-.flip:hover .inner, .flip[aria-pressed="true"] .inner { transform: rotateY(180deg); }
+.flip[aria-pressed="true"] .inner { transform: rotateY(180deg); }
+/* Skill cards: flip on hover only where a real mouse exists; on phones a tap toggles the card */
+@media (hover: hover) and (pointer: fine) { .flip:hover .inner { transform: rotateY(180deg); } }
 .flip .face { grid-area: 1 / 1; display: block; -webkit-backface-visibility: hidden; backface-visibility: hidden; border-radius: 22px; padding: 28px 26px 26px; box-shadow: 0 18px 30px -14px rgba(20, 22, 35, .55); font-size: 16px; line-height: 1.45; }
 .flip .front { background: linear-gradient(170deg, #1f4a36, #0b1f16); color: var(--fog); }
 .flip .back { background: #fbfefc; color: var(--slate); transform: rotateY(180deg); font-size: 14px; }
